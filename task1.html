@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #weather-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+
+        .weather-info {
+            font-size: 1.5em;
+            color: #37474f;
+            margin: 10px 0;
+        }
+
+        #temperature {
+            font-weight: bold;
+            font-size: 1.8em;
+            color: #ff5722;
+        }
+
+        #wind-speed {
+            font-size: 1.3em;
+            color: #1e88e5;
+        }
+
+        #observation-time {
+            font-size: 1.1em;
+            color: #757575;
+            font-style: italic;
+        }
+
+        #description {
+            font-style: italic;
+            font-size: 1.3em;
+            color: #757575;
+        }
+
+        /* Optional: Adding media query for smaller screens */
+        @media (max-width: 600px) {
+            #weather-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .weather-info {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="weather-container">
+        <h1>Current Weather</h1>
+        <p class="weather-info" id="temperature"></p>
+        <p class="weather-info" id="wind-speed"></p>
+        <p class="weather-info" id="description"></p>
+        <p class="weather-info" id="observation-time"></p>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const temperatureEl = document.getElementById('temperature');
+            const windSpeedEl = document.getElementById('wind-speed');
+            const descriptionEl = document.getElementById('description');
+            const observationTimeEl = document.getElementById('observation-time');
+
+            fetch('https://api.open-meteo.com/v1/forecast?latitude=35.6895&longitude=139.6917&current_weather=true')
+                .then(response => response.json())
+                .then(data => {
+                    const weather = data.current_weather;
+                    temperatureEl.textContent = `Temperature: ${weather.temperature}°C`;
+                    windSpeedEl.textContent = `Wind Speed: ${weather.windspeed} km/h`;
+                    descriptionEl.textContent = `Weather Code: ${weather.weathercode}`;
+                    observationTimeEl.textContent = `Observation Time: ${new Date(weather.time).toLocaleString()}`;
+                })
+                .catch(error => console.error('Error fetching weather data:', error));
+        });
+    </script>
+</body>
+</html>
