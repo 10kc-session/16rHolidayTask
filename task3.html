@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+            width: 100%;
+            max-width: 1200px;
+            box-sizing: border-box;
+        }
+        .image-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .image-item img {
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+        .image-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .image-item:hover img {
+            transform: scale(1.05);
+        }
+        .image-author {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9em;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .image-item:hover .image-author {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Gallery</h1>
+    <div id="gallery"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gallery = document.getElementById('gallery');
+
+            fetch('https://picsum.photos/v2/list')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(photo => {
+                        const imgItem = document.createElement('div');
+                        imgItem.className = 'image-item';
+
+                        const img = document.createElement('img');
+                        img.src = photo.download_url;
+                        img.alt = photo.author;
+
+                        const author = document.createElement('div');
+                        author.className = 'image-author';
+                        author.textContent = `By: ${photo.author}`;
+
+                        imgItem.appendChild(img);
+                        imgItem.appendChild(author);
+                        gallery.appendChild(imgItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching images:', error));
+        });
+    </script>
+</body>
+</html>
