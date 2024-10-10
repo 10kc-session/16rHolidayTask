@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random User Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #user-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            font-size: 1.1em;
+            color: #37474f;
+            margin: 10px 0;
+        }
+
+        .user-info span {
+            font-weight: bold;
+        }
+
+        #user-picture {
+            border-radius: 50%;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #user-container p {
+            margin: 5px 0;
+        }
+
+        /* Optional: Styling for responsive view */
+        @media (max-width: 600px) {
+            #user-container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .user-info {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="user-container">
+        <h1>Random User</h1>
+        <img id="user-picture" alt="User Picture" width="100">
+        <p class="user-info" id="user-name"></p>
+        <p class="user-info" id="user-email"></p>
+        <p class="user-info" id="user-location"></p>
+        <p class="user-info" id="user-phone"></p>
+        <p class="user-info" id="user-dob"></p>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userNameEl = document.getElementById('user-name');
+            const userEmailEl = document.getElementById('user-email');
+            const userLocationEl = document.getElementById('user-location');
+            const userPhoneEl = document.getElementById('user-phone');
+            const userDobEl = document.getElementById('user-dob');
+            const userPictureEl = document.getElementById('user-picture');
+
+            fetch('https://randomuser.me/api/')
+                .then(response => response.json())
+                .then(data => {
+                    const user = data.results[0];
+                    userNameEl.textContent = `Name: ${user.name.first} ${user.name.last}`;
+                    userEmailEl.textContent = `Email: ${user.email}`;
+                    userLocationEl.textContent = `Location: ${user.location.city}, ${user.location.country}`;
+                    userPhoneEl.textContent = `Phone: ${user.phone}`;
+                    userDobEl.textContent = `Date of Birth: ${new Date(user.dob.date).toLocaleDateString()}`;
+                    userPictureEl.src = user.picture.large;
+                })
+                .catch(error => console.error('Error fetching user data:', error));
+        });
+    </script>
+</body>
+</html>
